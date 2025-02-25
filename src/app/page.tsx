@@ -1,101 +1,163 @@
-import Image from "next/image";
+// src/app/page.tsx
+"use client";
 
-export default function Home() {
+import { useState, useEffect } from "react";
+import ConstraintNode from "@/components/ConstraintNode";
+import ConstraintSlider from "@/components/ConstraintSlider";
+import EducationSection from "@/components/EducationSection";
+import { ConstraintMap, calculateConstraintImpacts } from "@/utils/constraintCalculator";
+
+export default function ProjectConstraintsSimulator() {
+  const [constraints, setConstraints] = useState<ConstraintMap>({
+    scope: 50,
+    schedule: 50,
+    risk: 50,
+    budget: 50,
+    quality: 50,
+    resources: 50,
+  });
+
+  const [activeConstraint, setActiveConstraint] = useState<string | null>(null);
+  const [showEducation, setShowEducation] = useState(false);
+
+  const handleConstraintChange = (name: keyof ConstraintMap, value: number) => {
+    const updatedConstraints = calculateConstraintImpacts(name, value, constraints);
+    setConstraints(updatedConstraints);
+    setActiveConstraint(name);
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="min-h-screen p-4 md:p-8 bg-gray-50">
+      <div className="max-w-6xl mx-auto">
+        <header className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-4">Project Constraints Simulator</h1>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Explore how different project constraints affect one another. Adjust any constraint using the sliders below and observe how the
+            others respond.
+          </p>
+        </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+        {/* Interactive Diagram */}
+        <div className="mb-16">
+          <div className="relative w-full h-[500px] bg-white rounded-xl shadow-md p-4 mb-8">
+            {/* Top Row */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 top-8 flex justify-center w-full gap-4 md:gap-24">
+              <ConstraintNode
+                name="Scope"
+                value={constraints.scope}
+                isActive={activeConstraint === "scope"}
+                position="top-left"
+                color="blue"
+              />
+              <ConstraintNode
+                name="Schedule"
+                value={constraints.schedule}
+                isActive={activeConstraint === "schedule"}
+                position="top-center"
+                color="blue"
+              />
+              <ConstraintNode
+                name="Risk"
+                value={constraints.risk}
+                isActive={activeConstraint === "risk"}
+                position="top-right"
+                color="blue"
+              />
+            </div>
+
+            {/* Bottom Row */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 bottom-8 flex justify-center w-full gap-4 md:gap-24">
+              <ConstraintNode
+                name="Budget"
+                value={constraints.budget}
+                isActive={activeConstraint === "budget"}
+                position="bottom-left"
+                color="blue"
+              />
+              <ConstraintNode
+                name="Quality"
+                value={constraints.quality}
+                isActive={activeConstraint === "quality"}
+                position="bottom-center"
+                color="blue"
+              />
+              <ConstraintNode
+                name="Resources"
+                value={constraints.resources}
+                isActive={activeConstraint === "resources"}
+                position="bottom-right"
+                color="blue"
+              />
+            </div>
+
+            {/* SVG Connections */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+              {/* Draw lines between all nodes - simplified for now */}
+              <g stroke="#d97706" strokeWidth="2" fill="none">
+                {/* Top row connections */}
+                <path d="M 120,80 L 320,80" />
+                <path d="M 320,80 L 520,80" />
+
+                {/* Bottom row connections */}
+                <path d="M 120,420 L 320,420" />
+                <path d="M 320,420 L 520,420" />
+
+                {/* Vertical connections */}
+                <path d="M 120,80 L 120,420" />
+                <path d="M 320,80 L 320,420" />
+                <path d="M 520,80 L 520,420" />
+
+                {/* Diagonal connections */}
+                <path d="M 120,80 L 320,420" />
+                <path d="M 120,80 L 520,420" />
+                <path d="M 320,80 L 120,420" />
+                <path d="M 320,80 L 520,420" />
+                <path d="M 520,80 L 120,420" />
+                <path d="M 520,80 L 320,420" />
+              </g>
+            </svg>
+          </div>
+
+          {/* Sliders */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ConstraintSlider name="Scope" value={constraints.scope} onChange={(value: any) => handleConstraintChange("scope", value)} />
+            <ConstraintSlider
+              name="Schedule"
+              value={constraints.schedule}
+              onChange={(value: any) => handleConstraintChange("schedule", value)}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <ConstraintSlider name="Risk" value={constraints.risk} onChange={(value: any) => handleConstraintChange("risk", value)} />
+            <ConstraintSlider name="Budget" value={constraints.budget} onChange={(value: any) => handleConstraintChange("budget", value)} />
+            <ConstraintSlider
+              name="Quality"
+              value={constraints.quality}
+              onChange={(value: any) => handleConstraintChange("quality", value)}
+            />
+            <ConstraintSlider
+              name="Resources"
+              value={constraints.resources}
+              onChange={(value: any) => handleConstraintChange("resources", value)}
+            />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {/* Educational Toggle */}
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => setShowEducation(!showEducation)}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+          >
+            {showEducation ? "Hide Educational Content" : "Show Educational Content"}
+          </button>
+        </div>
+
+        {/* Educational Content */}
+        {showEducation && <EducationSection />}
+
+        <footer className="text-center text-gray-500 mt-12 pt-6 border-t border-gray-200">
+          <p>© {new Date().getFullYear()} Project Management Simulator</p>
+        </footer>
+      </div>
+    </main>
   );
 }
