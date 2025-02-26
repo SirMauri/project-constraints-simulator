@@ -1,12 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  // If you're using App Router:
-  experimental: {
-    appDir: true,
-  },
-  // Addressing the module warning in your logs:
-  // Add to silence the warning:
+  // Remove the appDir option - it's no longer needed in Next.js 14
+  // as App Router is the default
   typescript: {
     ignoreBuildErrors: true,
   },
