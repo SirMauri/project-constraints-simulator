@@ -7,7 +7,7 @@ import ConstraintSlider from "@/components/ConstraintSlider";
 import EducationSection from "@/components/EducationSection";
 import { ConstraintMap, calculateConstraintImpacts } from "@/utils/constraintCalculator";
 
-export default function ProjectConstraintsSimulator() {
+export default function Home() {
   const [constraints, setConstraints] = useState<ConstraintMap>({
     scope: 50,
     schedule: 50,

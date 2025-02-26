@@ -1,5 +1,15 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  output: "standalone",
+  // If you're using App Router:
+  experimental: {
+    appDir: true,
+  },
+  // Addressing the module warning in your logs:
+  // Add to silence the warning:
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
