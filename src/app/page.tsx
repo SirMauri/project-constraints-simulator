@@ -90,53 +90,24 @@ export default function ProjectConstraintsSimulator() {
               />
             </div>
 
-            {/* SVG Connections */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-              {/* Draw lines between all nodes - simplified for now */}
-              <g stroke="#d97706" strokeWidth="2" fill="none">
-                {/* Top row connections */}
-                <path d="M 120,80 L 320,80" />
-                <path d="M 320,80 L 520,80" />
-
-                {/* Bottom row connections */}
-                <path d="M 120,420 L 320,420" />
-                <path d="M 320,420 L 520,420" />
-
-                {/* Vertical connections */}
-                <path d="M 120,80 L 120,420" />
-                <path d="M 320,80 L 320,420" />
-                <path d="M 520,80 L 520,420" />
-
-                {/* Diagonal connections */}
-                <path d="M 120,80 L 320,420" />
-                <path d="M 120,80 L 520,420" />
-                <path d="M 320,80 L 120,420" />
-                <path d="M 320,80 L 520,420" />
-                <path d="M 520,80 L 120,420" />
-                <path d="M 520,80 L 320,420" />
-              </g>
-            </svg>
+            {/* Note: SVG Connections have been removed as requested */}
           </div>
 
           {/* Sliders */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ConstraintSlider name="Scope" value={constraints.scope} onChange={(value: any) => handleConstraintChange("scope", value)} />
+            <ConstraintSlider name="Scope" value={constraints.scope} onChange={(value) => handleConstraintChange("scope", value)} />
             <ConstraintSlider
               name="Schedule"
               value={constraints.schedule}
-              onChange={(value: any) => handleConstraintChange("schedule", value)}
+              onChange={(value) => handleConstraintChange("schedule", value)}
             />
-            <ConstraintSlider name="Risk" value={constraints.risk} onChange={(value: any) => handleConstraintChange("risk", value)} />
-            <ConstraintSlider name="Budget" value={constraints.budget} onChange={(value: any) => handleConstraintChange("budget", value)} />
-            <ConstraintSlider
-              name="Quality"
-              value={constraints.quality}
-              onChange={(value: any) => handleConstraintChange("quality", value)}
-            />
+            <ConstraintSlider name="Risk" value={constraints.risk} onChange={(value) => handleConstraintChange("risk", value)} />
+            <ConstraintSlider name="Budget" value={constraints.budget} onChange={(value) => handleConstraintChange("budget", value)} />
+            <ConstraintSlider name="Quality" value={constraints.quality} onChange={(value) => handleConstraintChange("quality", value)} />
             <ConstraintSlider
               name="Resources"
               value={constraints.resources}
-              onChange={(value: any) => handleConstraintChange("resources", value)}
+              onChange={(value) => handleConstraintChange("resources", value)}
             />
           </div>
         </div>
